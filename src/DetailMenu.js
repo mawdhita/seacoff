@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { HiArrowLeft } from 'react-icons/hi'; // ✅ Import icon
+import { HiArrowLeft } from 'react-icons/hi';
 import './App.css';
 
 const DetailMenu = () => {
@@ -10,6 +10,7 @@ const DetailMenu = () => {
   const [menu, setMenu] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [showModal, setShowModal] = useState(false);
+  const BASE_URL = 'https://seacoff-production.up.railway.app';  // <-- BASE_URL
 
   useEffect(() => {
     const storedSessionId = localStorage.getItem('session_id');
@@ -22,7 +23,7 @@ const DetailMenu = () => {
   }, []);
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/menus/${id}`)
+    axios.get(`${BASE_URL}/api/menu/${id}`)
       .then((res) => setMenu(res.data))
       .catch((err) => console.error('Gagal fetch detail menu:', err));
   }, [id]);
@@ -33,7 +34,8 @@ const DetailMenu = () => {
   const handleAddToCart = () => {
     const sessionId = localStorage.getItem('session_id');
 
-    axios.post('http://localhost:5000/api/cart',
+    axios.post(
+      `${BASE_URL}/api/cart`,    // <-- Ganti localhost jadi BASE_URL
       { id_menu: menu.id_menu, quantity },
       { headers: { 'x-session-id': sessionId } }
     )
@@ -45,9 +47,6 @@ const DetailMenu = () => {
     .catch(err => {
       console.error('Gagal tambah ke keranjang:', err.response ? err.response.data : err.message);
     });
-
-    setShowModal(true);
-    setTimeout(() => setShowModal(false), 2000);
   };
 
   const handleCheckout = () => {
@@ -57,13 +56,12 @@ const DetailMenu = () => {
   if (!menu) return <div>Loading...</div>;
 
   const getImage = (fotoMenu) => {
-    if (!fotoMenu) return 'http://localhost:5000/uploads/placeholder.png';
-    return `http://localhost:5000/uploads/${fotoMenu}`;
+    if (!fotoMenu) return `${BASE_URL}/uploads/placeholder.png`;  // <-- Ganti localhost jadi BASE_URL
+    return `${BASE_URL}/uploads/${fotoMenu}`;                     // <-- Ganti localhost jadi BASE_URL
   };
 
   return (
     <div className="detail-container">
-      {/* ✅ Tombol Back di pojok kiri atas konten */}
       <button
         onClick={() => navigate(-1)}
         className="back-button"

@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Tambah ini
+import { useNavigate } from 'react-router-dom';
 import './App.css';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const navigate = useNavigate(); // Tambah ini
+  const navigate = useNavigate();
+  const BASE_URL = 'https://seacoff-production.up.railway.app';  // <-- BASE_URL yang lo pake
 
   const fetchCart = () => {
-    axios.get('http://localhost:5000/api/cart')
+    axios.get(`${BASE_URL}/api/cart`)
       .then(res => {
         setCartItems(res.data);
         calculateTotal(res.data);
@@ -17,12 +18,11 @@ const Cart = () => {
       .catch(err => console.error('Gagal ambil cart:', err));
   };
 
- useEffect(() => {
-  axios.defaults.headers.common['x-session-id'] = localStorage.getItem('session_id');
-  fetchCart();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, []);
-
+  useEffect(() => {
+    axios.defaults.headers.common['x-session-id'] = localStorage.getItem('session_id');
+    fetchCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const calculateTotal = (items) => {
     const total = items.reduce((sum, item) => sum + item.quantity * item.harga, 0);
@@ -31,7 +31,7 @@ const Cart = () => {
 
   const handleIncrease = (id_cart, currentQty) => {
     const newQty = currentQty + 1;
-    axios.put(`http://localhost:5000/api/cart/${id_cart}`, { quantity: newQty })
+    axios.put(`${BASE_URL}/api/cart/${id_cart}`, { quantity: newQty })  // <- ganti localhost jadi BASE_URL
       .then(() => fetchCart())
       .catch(err => console.error('Gagal update quantity:', err));
   };
@@ -39,13 +39,13 @@ const Cart = () => {
   const handleDecrease = (id_cart, currentQty) => {
     if (currentQty <= 1) return;
     const newQty = currentQty - 1;
-    axios.put(`http://localhost:5000/api/cart/${id_cart}`, { quantity: newQty })
+    axios.put(`${BASE_URL}/api/cart/${id_cart}`, { quantity: newQty })  // <- ganti localhost jadi BASE_URL
       .then(() => fetchCart())
       .catch(err => console.error('Gagal update quantity:', err));
   };
 
   const handleRemove = (id_cart) => {
-    axios.delete(`http://localhost:5000/api/cart/${id_cart}`)
+    axios.delete(`${BASE_URL}/api/cart/${id_cart}`)  // <- ganti localhost jadi BASE_URL
       .then(() => fetchCart())
       .catch(err => console.error('Gagal hapus item:', err));
   };
@@ -65,7 +65,6 @@ const Cart = () => {
 
   return (
     <div className="cart-container">
-      {/* Tombol Back */}
       <button className="back-icon" onClick={() => navigate(-1)} style={{ border: 'none', background: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>
         ←
       </button>
@@ -75,7 +74,7 @@ const Cart = () => {
         {cartItems.map(item => (
           <li key={item.id_cart} className="cart-item">
             <img
-              src={`http://localhost:5000/uploads/${item.foto_menu}`}
+              src={`${BASE_URL}/uploads/${item.foto_menu}`}  // <- ganti localhost jadi BASE_URL
               alt={item.nama_menu}
               className="cart-item-img"
             />

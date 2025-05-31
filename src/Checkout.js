@@ -3,11 +3,12 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 
+const BASE_URL = 'https://seacoff-production.up.railway.app';
+
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Ambil data dari location.state, fallback dari localStorage kalau kosong
   let { items, totalPrice } = location.state || {};
 
   if ((!items || items.length === 0) && localStorage.getItem('checkoutItems')) {
@@ -30,7 +31,7 @@ const Checkout = () => {
   }, [items, navigate]);
 
   if (!items || items.length === 0) {
-    return null;  // Biarkan kosong saat redirect jalan
+    return null;
   }
 
   const subtotal = totalPrice;
@@ -59,7 +60,7 @@ const Checkout = () => {
     console.log("📦 Data dikirim ke backend:", data);
 
     try {
-      const res = await axios.post("http://localhost:3001/api/orders", data);
+      const res = await axios.post(`${BASE_URL}/api/orders`, data);
       console.log("✅ Respon dari backend:", res.data);
 
       navigate('/nota', {
@@ -88,7 +89,7 @@ const Checkout = () => {
         {items.map((item, index) => (
           <div className="checkout-item" key={index}>
             <img
-              src={`http://localhost:5000/uploads/${item.foto_menu}`}
+              src={`${BASE_URL}/uploads/${item.foto_menu}`}
               alt={item.nama_menu}
               className="item-img-side"
             />

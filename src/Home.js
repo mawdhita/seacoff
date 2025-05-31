@@ -4,6 +4,8 @@ import { FiHome, FiShoppingCart, FiMenu, FiSearch, FiUser } from 'react-icons/fi
 import axios from 'axios';
 import './App.css';
 
+const BASE_URL = 'https://seacoff-production.up.railway.app';
+
 const Home = () => {
   const navigate = useNavigate();
 
@@ -18,7 +20,7 @@ const Home = () => {
 
   const fetchMenu = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/menu');
+      const response = await axios.get(`${BASE_URL}/api/menu`);
       const menuData = response.data;
 
       setCoffees(menuData);
@@ -138,7 +140,7 @@ const Home = () => {
             filteredCoffees.map((coffee, idx) => (
               <div key={idx} className="coffee-card">
                 <img
-                  src={`http://localhost:5000/uploads/${coffee.foto_menu}`}
+                  src={`${BASE_URL}/uploads/${coffee.foto_menu}`}
                   alt={coffee.nama_menu}
                 />
                 <h3>{coffee.nama_menu}</h3>
