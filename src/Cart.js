@@ -17,10 +17,12 @@ const Cart = () => {
       .catch(err => console.error('Gagal ambil cart:', err));
   };
 
-  useEffect(() => {
-    axios.defaults.headers.common['x-session-id'] = localStorage.getItem('session_id');
-    fetchCart();
-  }, []);
+ useEffect(() => {
+  axios.defaults.headers.common['x-session-id'] = localStorage.getItem('session_id');
+  fetchCart();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
+
 
   const calculateTotal = (items) => {
     const total = items.reduce((sum, item) => sum + item.quantity * item.harga, 0);
