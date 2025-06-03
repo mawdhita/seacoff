@@ -1,14 +1,18 @@
 const mysql = require('mysql2');
 
-// Gunakan URL koneksi dari Railway
-const connection = mysql.createConnection('mysql://root:MVLuTixdZImaYvpJVKpGqOFZFZxedKxQ@switchback.proxy.rlwy.net:23941/railway');
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '', // lo bilang tadi ga pakai password
+    database: 'balen_coffee'
+});
 
-connection.connect(err => {
+db.connect(err => {
     if (err) {
-        console.error('Error connecting to database:', err);
+        console.error('Error connect ke database:', err);
     } else {
-        console.log('Connected to MySQL database railway');
+        console.log('Connected ke MySQL database balen_coffee');
     }
 });
 
-module.exports = connection;
+module.exports = db;
