@@ -1,11 +1,18 @@
 const mysql = require('mysql2');
+const url = require('url');
+
+// Railway recommended: use MYSQL_URL environment variable
+const dbUrl = process.env.MYSQL_URL || 'mysql://root:MVLuTixdZImaYvpJVKpGqOFZFZxedKxQ@mysql.railway.internal:3306/railway';
+
+const parsedUrl = url.parse(dbUrl);
+const [user, password] = parsedUrl.auth.split(':');
 
 const db = mysql.createConnection({
-    host: process.env.MYSQLHOST || 'mysql.railway.internal',
-    user: process.env.MYSQLUSER || 'root',
-    password: process.env.MYSQLPASSWORD || 'MVLuTixdZImaYvpJVKpGqOFZFZxedKxQ',
-    database: process.env.MYSQLDATABASE || 'railway',
-    port: process.env.MYSQLPORT || 3306,
+    host: parsedUrl.hostname,
+    user: user,
+    password: password,
+    database: parsedUrl.pathname.replace('/', ''),
+    port: parsedUrl.port,
     ssl: {
         rejectUnauthorized: false
     }
