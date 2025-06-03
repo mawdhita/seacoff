@@ -54,6 +54,13 @@ app.get('/orders', (req, res) => {
 app.use('/api', orderRoutes);
 app.use('/api/cart', cartRoutes); // ⬅️ Tambahin ini
 
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+// Untuk semua route selain API, kirim index.html React build
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
