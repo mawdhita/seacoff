@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
 
 const db = mysql.createConnection({
-    host: process.env.MYSQL_URL,
+    host: process.env.MYSQL_PUBLIC_URL,
     user: process.env.MYSQLUSER,
     password: process.env.MYSQLPASSWORD, // lo bilang tadi ga pakai password
     database: process.env.MYSQLDATABASE,
