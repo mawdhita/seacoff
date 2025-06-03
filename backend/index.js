@@ -54,5 +54,6 @@ app.get('/orders', (req, res) => {
 app.use('/api', orderRoutes);
 app.use('/api/cart', cartRoutes); // ⬅️ Tambahin ini
 
-const serverless = require('serverless-http');
-module.exports = serverless(app);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
